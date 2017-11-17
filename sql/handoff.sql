@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS handoff;
 DROP TABLE IF EXISTS lead;
-DROP TABLE IF EXISTS salesRole;
 DROP TABLE IF EXISTS leadSource;
 DROP TABLE IF EXISTS profile;
+DROP TABLE IF EXISTS salesRole;
 DROP TABLE IF EXISTS company;
 
 CREATE TABLE company (
@@ -18,9 +18,20 @@ CREATE TABLE company (
 	PRIMARY KEY (companyId)
 );
 
+CREATE TABLE salesRole (
+	salesRoleId BINARY(16) NOT NULL,
+	leadSourceCompanyId BINARY(16) NOT NULL,
+	salesRoleName VARCHAR(64) NOT NULL,
+	salesRoleType VARCHAR(64) NOT NULL,
+	-- this officiates the primary key for the entity
+	FOREIGN KEY (leadSourceCompanyId) REFERENCES company(companyId),
+	PRIMARY KEY (salesRoleId)
+);
+
 CREATE TABLE profile (
 	profileId BINARY(16) NOT NULL,
 	profileCompanyId BINARY(16) NOT NULL,
+	profileSalesRoleType BINARY(16) NOT NULL,
 	profileActive TINYINT NOT NULL,
 	profileActivationToken CHAR(32),
 	profileEmail VARCHAR(128) NOT NULL,
@@ -28,7 +39,6 @@ CREATE TABLE profile (
 	profileImage VARCHAR(255),
 	profileLastLogin DATETIME(6),
 	profileName VARCHAR(64) NOT NULL,
-	profileRole VARCHAR(64) NOT NULL,
 	profileSalt CHAR(64) NOT NULL,
 	profileSalesforceId VARCHAR(32) NOT NULL,
 	UNIQUE (profileEmail),
@@ -37,6 +47,7 @@ CREATE TABLE profile (
 	INDEX (profileEmail),
 	-- this officiates the primary key for the entity
 	FOREIGN KEY (profileCompanyId) REFERENCES company(companyId),
+	FOREIGN KEY (profileSalesRoleType) REFERENCES salesRole(salesRoleType),
 	PRIMARY KEY (profileId)
 );
 
@@ -51,15 +62,6 @@ CREATE TABLE leadSource (
 	PRIMARY KEY (leadSourceId)
 );
 
-CREATE TABLE salesRole (
-	salesRoleId BINARY(16) NOT NULL,
-	leadSourceCompanyId BINARY(16) NOT NULL,
-	salesRoleName VARCHAR(64) NOT NULL,
-	salesRoleType VARCHAR(64) NOT NULL,
-	-- this officiates the primary key for the entity
-	FOREIGN KEY (leadSourceCompanyId) REFERENCES company(companyId),
-	PRIMARY KEY (salesRoleId)
-);
 
 CREATE TABLE lead (
 	leadId BINARY(16) NOT NULL,
