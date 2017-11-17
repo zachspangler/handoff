@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Handoff | Conceptual Model</title>
+	</head>
+	<body>
+		<h1>Conceptual Model</h1>
+		<h6>Author: Zach Spangler</h6>
+		<h4>COMPANY</h4>
+		<ul>
+			<li>companyId (primary key)</li>
+			<li>companyAddress</li>
+			<li>companyName</li>
+			<li>companyPhone</li>
+			<li>companyPostalCode</li>
+			<li>companySalesforceOrgId</li>
+			<li>companyState</li>
+		</ul>
+		<h4>PROFILE</h4>
+		<ul>
+			<li>profileID (primary key)</li>
+			<li>profileCompanyId (foreign key)</li>
+			<li>profileActivationToken</li>
+			<li>profileActive</li>
+			<li>profileEmail</li>
+			<li>profileHash</li>
+			<li>profileLastLogin</li>
+			<li>profileName</li>
+			<li>profileRole</li>
+			<li>profileSalt</li>
+		</ul>
+		<h4>LEAD SOURCE</h4>
+		<ul>
+			<li>leadSourceId (primary key)</li>
+			<li>leadSourceCompanyId (foreign key)</li>
+			<li>leadSourceName</li>
+			<li>leadSourceType</li>
+		</ul>
+		<h4>SALES ROLE</h4>
+		<ul>
+			<li>salesRoleId (primary key)</li>
+			<li>salesRoleCompanyId (foreign key)</li>
+			<li>salesRoleName</li>
+			<li>salesRoleType</li>
+		</ul>
+		<h4>LEAD DETAIL</h4>
+		<ul>
+			<li>leadDetailId (primary key)</li>
+			<li>leadDetailProfileId (foreign key)</li>
+			<li>leadDetailLeadSource (foreign key)</li>
+			<li>leadDetailAction -- this is identify if the lead is handed off or skipped</li>
+			<li>leadDetailContact</li>
+			<li>leadDetailContactName</li>
+			<li>leadDetailDateTime</li>
+			<li>leadDetailName</li>
+			<li>leadDetailSalesForceId</li>
+			<li>leadDetailSoldAmount</li>
+			<li>leadDetailStatus</li>
+		</ul>
+	</body>
+</html>

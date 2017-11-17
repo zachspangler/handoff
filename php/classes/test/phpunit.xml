@@ -1,0 +1,15 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="Handoff">
+			<file>ProfileTest.php</file>
+			<file>EventTest.php</file>
+			<file>RatingTest.php</file>
+			<file>EventAttendanceTest.php</file>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">..</directory>
+		</whitelist>
+	</filter>
+</phpunit>
