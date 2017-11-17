@@ -1,5 +1,5 @@
 <?php
-namespace Edu\Cnm\CrowdVibe;
+namespace Edu\Cnm\Handoff;
 /**
  * Trait to Validate a mySQL Date
  *
