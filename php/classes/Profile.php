@@ -1,7 +1,9 @@
 <?php
 namespace Edu\Cnm\Handoff;
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+
 use Ramsey\Uuid\Uuid;
+
 /**
  * Handoff User Profile
  *
@@ -12,6 +14,7 @@ use Ramsey\Uuid\Uuid;
  **/
 class Profile implements \JsonSerializable {
 	use ValidateUuid;
+	use ValidateDate;
 	/**
 	 * id for this Profile; this is the primary key
 	 * @var Uuid $profileId
@@ -86,17 +89,17 @@ class Profile implements \JsonSerializable {
 	 * @param string $newProfileEmail string containing email
 	 * @param string $newProfileHash string containing password hash
 	 * @param string $newProfileImage string containing the location of the image
-	 * @param \DateTime $newProfileLastLogin documents the last time the account was used
+	 * @param ?\DateTime $newProfileLastLogin documents the last time the account was used
 	 * @param string $newProfileName string full name of the user
 	 * @param string $newProfileSalt string containing password salt
-	 * @param string $profileSalesForceId string to associate SalesForceid
+	 * @param ?string $profileSalesForceId string to associate SalesForceId
 	 * @throws \InvalidArgumentException if data types are not valid
 	 * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws \TypeError if a data type violates a data hint
 	 * @throws \Exception if some other exception occurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 **/
-	public function __construct($newProfileId, $newProfileCompanyId, $newProfileSalesRoleId, bool $newProfileActive, ?string $newProfileActivationToken, string $newProfileEmail, string $newProfileHash, string $newProfileImage, \DateTime $newProfileLastLogin, string $newProfileName, string $newProfileSalt, ?string $profileSalesForceId) {
+	public function __construct($newProfileId, $newProfileCompanyId, $newProfileSalesRoleId, bool $newProfileActive, ?string $newProfileActivationToken, string $newProfileEmail, string $newProfileHash, string $newProfileImage, ?\DateTime $newProfileLastLogin, string $newProfileName, string $newProfileSalt, ?string $newProfileSalesForceId) {
 		try {
 			$this->setProfileId($newProfileId);
 			$this->setProfileCompanyId($newProfileCompanyId);
@@ -336,6 +339,38 @@ class Profile implements \JsonSerializable {
 		$this->profileImage = $newProfileImage;
 	}
 	/**
+	 * accessor method for last login date
+	 *
+	 * @return \DateTime value of at last login
+	 **/
+	public function getProfileLastLogin(): ?string {
+		return ($this->profileLastLogin);
+	}
+
+	/**
+	 * mutator method for last login date
+	 *
+	 * @param \DateTime|string $newProfileLastLogin for last login date
+	 * @throws \InvalidArgumentException if $newProfileLastLogin is not a valid object or string
+	 * @throws \RangeException if $newProfileLastLogin is a date that does not exist
+	 **/
+	public function setProfileLastLogin($newProfileLastLogin = null) : void {
+		// base case: if the date is null, use the current date and time
+		if($newProfileLastLogin === null) {
+			$this->profileLastLogin = new \DateTime();
+			return;
+		}
+		// store the like date using the ValidateDate trait
+		try {
+			$newProfileLastLogin = self::validateDateTime($newProfileLastLogin);
+		} catch(\InvalidArgumentException | \RangeException $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->profileLastLogin = $newProfileLastLogin;
+	}
+
+	/**
 	 * accessor method for profile name
 	 *
 	 * @return string value of at profile name
@@ -397,35 +432,50 @@ class Profile implements \JsonSerializable {
 		$this->profileSalt = $newProfileSalt;
 	}
 	/**
-	 * accessor method for email
+	 * accessor method for SalesForce id associated with profile
 	 *
-	 * @return string value of email
+	 * @return string value of SalesForce id
 	 **/
-	public function getProfileSalesforceId(): string {
-		return $this->profileSalesforceId;
+	public function getProfileSalesForceId(): ?string {
+		return $this->profileSalesForceId;
 	}
 	/**
-	 * mutator method for email
+	 * mutator method for SalesForce id
 	 *
 	 * @param string $newProfileSalesForceId new value of email
 
-	 * @throws \RangeException if $newEmail is > 128 characters
-	 * @throws \TypeError if $newEmail is not a string
+	 * @throws \RangeException if $newProfileSalesForceId is > 255 characters
+	 * @throws \TypeError if $newProfileSalesForceId is not a string
 	 **/
-	public function setProfileEmail(string $newProfileSalesForceId): void {
+	public function setProfileSalesForceId(string $newProfileSalesForceId): void {
 		if($newProfileSalesForceId === null) {
-			$this->profileRate = null;
+			$this->ProfileSalesForceId = null;
 			return;
 		}
 
-		// verify the email is secure
-		$profileSalesforceId = trim($profileSalesforceId);
-		$profileSalesforceId = filter_var($newProfileEmail, FILTER_SANITIZE_EMAIL);
-		// verify the email will fit in the database
-		if(strlen($newprofileSalesforceId) > 255) {
-			throw(new \RangeException("profile email is too large"));
+		// verify the SalesForce Id is secure
+		$newProfileSalesForceId = trim($newProfileSalesForceId);
+		$newProfileSalesForceId = filter_var($newProfileSalesForceId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		// verify the SalesForce Id will fit in the database
+		if(strlen($newProfileSalesForceId) > 255) {
+			throw(new \RangeException("Salesforce id is too large"));
 		}
 		// store the email
-		$this->profileSalesforceId = $newprofileSalesforceId;
+		$this->profileSalesForceId = $newProfileSalesForceId;
+	}
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public
+	function jsonSerialize() {
+		$fields = get_object_vars($this);
+		$fields["profileId"] = $this->profileId->toString();
+		$fields["profileCompanyId"] = $this->profileCompanyId->toString();
+		$fields["profileSalesRoleId"] = $this->profileSalesRoleId->toString();
+		unset($fields["profileHash"]);
+		unset($fields["profileSalt"]);
+		return ($fields);
 	}
 }
