@@ -1,17 +1,18 @@
 <?php
+
 namespace Edu\Cnm\Handoff;
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 
-use Ramsey\Uuid\Uuid;
+	use Ramsey\Uuid\Uuid;
 
-/**
- * Handoff User Profile
- *
- * This is the user profile information stored for a Handoff user.
- *
- * @author Zach Spangler <zaspangler@gmail.com> and Dylan McDonald <dmcdonald21@cnm.edu>
- * @version 1.0.0
- **/
+	/**
+	 * Handoff User Profile
+	 *
+	 * This is the user profile information stored for a Handoff user.
+	 *
+	 * @author Zach Spangler <zaspangler@gmail.com> and Dylan McDonald <dmcdonald21@cnm.edu>
+	 * @version 1.0.0
+	 **/
 class Profile implements \JsonSerializable {
 	use ValidateUuid;
 	use ValidateDate;
@@ -460,9 +461,11 @@ class Profile implements \JsonSerializable {
 		if(strlen($newProfileSalesForceId) > 255) {
 			throw(new \RangeException("Salesforce id is too large"));
 		}
-		// store the email
+		// store the id
 		$this->profileSalesForceId = $newProfileSalesForceId;
 	}
+
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *

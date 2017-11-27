@@ -1,0 +1,12 @@
+leadId BINARY(16) NOT NULL,
+leadCompanyId BINARY(16) NOT NULL,
+leadLeadSource BINARY(16) NOT NULL,
+leadContactEmail VARCHAR(128),
+leadContactName VARCHAR(64) NOT NULL,
+leadContactPhone VARCHAR(32),
+leadDateTime DATETIME(6) NOT NULL,
+leadName VARCHAR(128),
+leadSalesForceId VARCHAR(255),
+leadSoldAmount DECIMAL(9,2),
+leadStatus VARCHAR(64),
+

@@ -20,11 +20,11 @@ CREATE TABLE company (
 
 CREATE TABLE salesRole (
 	salesRoleId BINARY(16) NOT NULL,
-	leadSourceCompanyId BINARY(16) NOT NULL,
+	salesRoleCompanyId BINARY(16) NOT NULL,
 	salesRoleName VARCHAR(64) NOT NULL,
 	salesRoleType VARCHAR(64) NOT NULL,
 	-- this officiates the primary key for the entity
-	FOREIGN KEY (leadSourceCompanyId) REFERENCES company(companyId),
+	FOREIGN KEY (salesRoleCompanyId) REFERENCES company(companyId),
 	PRIMARY KEY (salesRoleId)
 );
 
@@ -88,7 +88,7 @@ CREATE TABLE handoff (
 	leadHandoffLeadId BINARY(16) NOT NULL,
 	leadHandoffGiverProfileId BINARY(16) NOT NULL,
 	leadHandoffReceiverProfileId BINARY(16) NOT NULL,
-	leadAction VARCHAR(64) NOT NULL,
+	leadHandoffAction VARCHAR(64) NOT NULL,
 	-- this officiates the primary key for the entity
 	FOREIGN KEY (leadHandoffLeadId) REFERENCES lead(leadId),
 	FOREIGN KEY (leadHandoffGiverProfileId) REFERENCES profile(profileId),
