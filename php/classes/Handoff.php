@@ -1,10 +1,3 @@
-
-leadHandoffId BINARY(16) NOT NULL,
-	leadHandoffLeadId BINARY(16) NOT NULL,
-	leadHandoffGiverProfileId BINARY(16) NOT NULL,
-	leadHandoffReceiverProfileId BINARY(16) NOT NULL,
-	leadAction VARCHAR(64) NOT NULL,
-
 <?php
 
 namespace Edu\Cnm\Handoff;
@@ -13,14 +6,14 @@ require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 
 /**
- * Handoff Sales Role
+ * Handoff Action List
  *
  * This is the lead source information stored for each company
  *
  * @author Zach Spangler <zaspangler@gmail.com> and Dylan McDonald <dmcdonald21@cnm.edu>
  * @version 1.0.0
  **/
-class Profile implements \JsonSerializable {
+class Handoff implements \JsonSerializable {
 	use ValidateUuid;
 	/**
 	 * id for this lead source identifier; this is the primary key

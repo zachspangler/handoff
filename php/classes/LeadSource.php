@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
  * @author Zach Spangler <zaspangler@gmail.com> and Dylan McDonald <dmcdonald21@cnm.edu>
  * @version 1.0.0
  **/
-class Profile implements \JsonSerializable {
+class LeadSource implements \JsonSerializable {
 	use ValidateUuid;
 	/**
 	 * id for this lead source identifier; this is the primary key
